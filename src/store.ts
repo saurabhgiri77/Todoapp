@@ -5,28 +5,33 @@ import {
   TODO_DECREASE,
   TODO_INCREASE,
 } from "./actions";
+import { Todo } from "./types";
 
 type State = {
-  todo: number;
-  done: number;
+  todo: Todo[];
+  done: Todo[];
 };
 
-const initialState: State = { todo: 0, done: 0 };
+const initialState: State = { todo: [], done: [] };
 
 const reducer: Reducer<State> = (currentState = initialState, action) => {
   console.log("currentState", currentState, "action", action);
-  switch (action.type) {
+  switch (action.type || action.payload) {
     case TODO_INCREASE: {
-      return { ...currentState, todo: currentState.todo + 1 };
+      const newArray = [...currentState.todo, action.payload];
+      return { ...currentState, todo: newArray };
     }
     case TODO_DECREASE: {
-      return { ...currentState, todo: currentState.todo - 1 };
+      const newArray = currentState.todo.filter((_, i) => i);
+      return { ...currentState, todo: newArray };
     }
     case DONE_INCREASE: {
-      return { ...currentState, done: currentState.done + 1 };
+      const newArray = [...currentState.done, action.payload];
+      return { ...currentState, done: newArray };
     }
     case DONE_DECREASE: {
-      return { ...currentState, done: currentState.done - 1 };
+      const newArray = currentState.done.filter((_, i) => i);
+      return { ...currentState, done: newArray };
     }
     default: {
       return currentState;
@@ -37,3 +42,10 @@ const reducer: Reducer<State> = (currentState = initialState, action) => {
 const store = createStore(reducer);
 
 export default store;
+
+// const newArray = currentState.todo.map((t) => {
+//   if (t === action.payload) {
+//     return { ...t };
+//   }
+//   return t;
+// });

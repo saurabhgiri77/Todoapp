@@ -9,8 +9,8 @@ const TodoForm: FC<TodoFormProps> = (props) => {
 
   const dispatch = useDispatch();
 
-  const update = () => {
-    dispatch({ type: TODO_INCREASE });
+  const addTodoCount = () => {
+    dispatch({ type: TODO_INCREASE, payload: props.todo });
   };
 
   const inputChange = (event: any) => {
@@ -24,7 +24,7 @@ const TodoForm: FC<TodoFormProps> = (props) => {
       props.create(todo);
       setTodo("");
       props.hideForm();
-      update();
+      addTodoCount();
     }
   };
 
@@ -47,7 +47,5 @@ const TodoForm: FC<TodoFormProps> = (props) => {
     </div>
   );
 };
-
-TodoForm.defaultProps = {};
 
 export default memo(TodoForm);

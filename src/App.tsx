@@ -4,65 +4,42 @@ import Button from "./Button";
 import Todolist from "./Todolist";
 import Donelist from "./Donelist";
 import TodoDisplayer from "./TodoDisplayer";
-import { useDispatch } from "react-redux";
-import { DONE_DECREASE, TODO_DECREASE } from "./actions";
+import { Todo } from "./types";
 
 let i: number = 0;
 
 const App: FC = () => {
   const [showForm, setShowForm] = React.useState(false);
-  const [inComplete, setIncomplete] = React.useState([]);
-  const [complete, setComplete] = React.useState([]);
+  const [inComplete, setIncomplete] = React.useState<Todo[]>([]);
+  const [complete, setComplete] = React.useState<Todo[]>([]);
 
-  type todoType = {
-    id: number;
-    title: string;
-  };
-
-  const dispatch = useDispatch();
-  const incompleteUpdater = () => {
-    dispatch({ type: TODO_DECREASE });
-    console.log("decreased");
-  };
-  const completeUpdater = () => {
-    dispatch({ type: DONE_DECREASE });
-  };
-
-  const notChecked = false;
-  const checked = true;
-
-  const updateTodoList = (todoList: any) => {
-    setIncomplete(todoList);
-  };
-
-  const saveTodo = (todo: todoType) => {
-    updateTodoList([...inComplete, { id: i, title: todo }]);
+  const saveTodo = (todo: string) => {
+    setIncomplete([...inComplete, { id: i, title: todo, done: false }]);
     i++;
   };
 
-  const toComplete = (todo: never) => {
+  const toComplete = (todo: Todo) => {
     const change = inComplete.filter((t) => t !== todo);
     setComplete([...complete, todo]);
     setIncomplete(change);
-    localStorage.setItem("a", JSON.stringify(inComplete));
+    todo.done = true;
   };
 
-  const toBackToList = (todo: never) => {
+  const toBackToList = (todo: Todo) => {
     const change = complete.filter((t) => t !== todo);
     setIncomplete([...inComplete, todo]);
     setComplete(change);
+    todo.done = false;
   };
 
-  const deleteComplete = (todo: todoType) => {
+  const deleteComplete = (todo: Todo) => {
     const change = complete.filter((t) => t !== todo);
     setComplete(change);
-    completeUpdater();
   };
 
-  const deleteIncomplete = (todo: todoType) => {
+  const deleteIncomplete = (todo: Todo) => {
     const change = inComplete.filter((t) => t !== todo);
     setIncomplete(change);
-    incompleteUpdater();
   };
 
   return (
@@ -81,12 +58,12 @@ const App: FC = () => {
         {!inComplete.length && (
           <h1 className="text-gray-500">No todo's here</h1>
         )}
-        {inComplete.map((t) => (
+        {inComplete.map((t: Todo) => (
           <Todolist
             todo={t}
-            key={t}
+            key={t.id}
             check={toComplete}
-            done={notChecked}
+            done={t.done}
             onDelete={deleteIncomplete}
           />
         ))}
@@ -104,12 +81,12 @@ const App: FC = () => {
       <div className="my-4">
         <h3 className="font-semibold text-xl sm:py-4 py-4">Things Done</h3>
         {!complete.length && <h1 className="text-gray-500">No todo's here</h1>}
-        {complete.map((t) => (
+        {complete.map((t: Todo) => (
           <Donelist
             todo={t}
-            key={t}
+            key={t.id}
             check={toBackToList}
-            done={checked}
+            done={t.done}
             onDelete={deleteComplete}
           />
         ))}
@@ -117,7 +94,5 @@ const App: FC = () => {
     </div>
   );
 };
-
-App.defaultProps = {};
 
 export default App;

@@ -1,17 +1,24 @@
 export type buttonProps = {
   theme?: string;
-  onClick: (data: any) => void;
+  onClick: (data: Todo) => void;
   children: string;
 };
 
 export type TodolistProps = {
-  done: any | boolean;
-  check: any;
-  onDelete: (data: any) => void;
-  todo: { id: number; title: string };
+  done: boolean;
+  check: (data: Todo) => void;
+  onDelete: (data: Todo) => void;
+  todo: { id: number; title: string; done: boolean };
 };
 
 export type TodoFormProps = {
-  create: (data: any) => void;
+  create: (data: string) => void;
   hideForm: any;
+  todo?: { id: number; title: string; done: boolean };
+};
+
+export type Todo = {
+  id: number;
+  title: string;
+  done: boolean;
 };
