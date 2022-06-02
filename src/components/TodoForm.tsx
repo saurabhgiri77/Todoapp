@@ -1,35 +1,34 @@
-import { FC, memo, useState } from "react";
+import { ChangeEvent, FC, memo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { TODO_INCREASE } from "./actions";
 import Button from "./Button";
-import { TodoFormProps } from "./types";
+import { TodoFormProps } from "../types/types";
+import { TODO_ADD } from "../actions/todo.";
 
 const TodoForm: FC<TodoFormProps> = (props) => {
   const [todo, setTodo] = useState("");
 
   const dispatch = useDispatch();
 
-  const addTodoCount = () => {
-    dispatch({ type: TODO_INCREASE, payload: props.todo });
-  };
-
-  const inputChange = (event: any) => {
+  const inputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTodo(event.target.value);
   };
 
-  const saveTodo = () => {
+  const saveTodo = (event: any) => {
+    event.preventDefault();
     if (todo === "") {
       return;
     } else {
-      props.create(todo);
+      dispatch({ type: TODO_ADD, payload: todo });
       setTodo("");
       props.hideForm();
-      addTodoCount();
     }
   };
 
   return (
-    <div className="border p-3 sm:p-3 sm:text-lg rounded-md">
+    <form
+      onSubmit={saveTodo}
+      className="border p-3 sm:p-3 sm:text-lg rounded-md"
+    >
       <h3 className="sm:py-2 py-2 font-semibold">Create a Todo</h3>
       <input
         value={todo}
@@ -44,7 +43,7 @@ const TodoForm: FC<TodoFormProps> = (props) => {
           Cancel
         </Button>
       </div>
-    </div>
+    </form>
   );
 };
 

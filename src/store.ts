@@ -1,51 +1,51 @@
 import { createStore, Reducer } from "redux";
-import {
-  DONE_DECREASE,
-  DONE_INCREASE,
-  TODO_DECREASE,
-  TODO_INCREASE,
-} from "./actions";
-import { Todo } from "./types";
+import { TODO_ADD, TODO_STATUS_CHANGE } from "./actions/todo.";
+import { Todo } from "./types/types";
 
-type State = {
-  todo: Todo[];
-  done: Todo[];
+export type State = {
+  todos: Todo[];
 };
 
-const initialState: State = { todo: [], done: [] };
+let nextNumber = 0;
 
-const reducer: Reducer<State> = (currentState = initialState, action) => {
-  console.log("currentState", currentState, "action", action);
-  switch (action.type || action.payload) {
-    case TODO_INCREASE: {
-      const newArray = [...currentState.todo, action.payload];
-      return { ...currentState, todo: newArray };
+const savedTodos = localStorage.getItem("todos");
+
+const initialState: State = {
+  todos: savedTodos ? JSON.parse(savedTodos) : [],
+};
+
+const reducer: Reducer<State> = (state = initialState, action) => {
+  console.log("state", state, "action", action);
+  switch (action.type) {
+    case TODO_ADD: {
+      const titleText = action.payload;
+      const todo: Todo = { id: nextNumber, title: titleText, done: false };
+      nextNumber++;
+
+      return { ...state, todos: [...state.todos, todo] };
     }
-    case TODO_DECREASE: {
-      const newArray = currentState.todo.filter((_, i) => i);
-      return { ...currentState, todo: newArray };
-    }
-    case DONE_INCREASE: {
-      const newArray = [...currentState.done, action.payload];
-      return { ...currentState, done: newArray };
-    }
-    case DONE_DECREASE: {
-      const newArray = currentState.done.filter((_, i) => i);
-      return { ...currentState, done: newArray };
+
+    case TODO_STATUS_CHANGE: {
+      const { id, done } = action.payload;
+
+      const newTodos = state.todos.map((t) => {
+        if (t.id === id) {
+          return { ...t, done };
+        }
+        return t;
+      });
+      return { ...state, todos: newTodos };
     }
     default: {
-      return currentState;
+      return state;
     }
   }
 };
 
-const store = createStore(reducer);
+const store = createStore(
+  reducer,
+  (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 export default store;
-
-// const newArray = currentState.todo.map((t) => {
-//   if (t === action.payload) {
-//     return { ...t };
-//   }
-//   return t;
-// });

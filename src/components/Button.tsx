@@ -1,5 +1,5 @@
 import { FC, memo } from "react";
-import { buttonProps } from "./types";
+import { buttonProps } from "../types/types";
 
 const Button: FC<buttonProps> = (props) => {
   let theme = "bg-yellow-500 rounded-md text-white";
