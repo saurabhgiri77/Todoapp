@@ -15,7 +15,7 @@ const initialState: State = {
 };
 
 const reducer: Reducer<State> = (state = initialState, action) => {
-  console.log("state", state, "action", action);
+  console.log("state", state, "action", action); //doubt
   switch (action.type) {
     case TODO_ADD: {
       const titleText = action.payload;

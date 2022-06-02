@@ -1,6 +1,6 @@
 import { FC, memo } from "react";
-import { connect, useDispatch } from "react-redux";
-import { TODO_STATUS_CHANGE } from "../actions/todo.";
+import { connect } from "react-redux";
+import { statusChangeCreator } from "../actions/todo.";
 import { completeSelector, incompleteSelector } from "../selectors/todo";
 import { State } from "../store";
 import { Todo } from "../types/types";
@@ -8,15 +8,10 @@ import TodoRow from "./TodoRow";
 
 type Props = {
   todos: Todo[];
+  handleStatusChange: (id: number, done: boolean) => void;
 };
 
-const TodoList: FC<Props> = ({ todos }) => {
-  const dispatch = useDispatch();
-
-  const handleStatusChange = (id: number, done: boolean) => {
-    dispatch({ type: TODO_STATUS_CHANGE, payload: { id, done } });
-  };
-
+const TodoList: FC<Props> = ({ todos, handleStatusChange }) => {
   return (
     <div>
       {todos.map((t) => (
@@ -32,13 +27,14 @@ TodoList.defaultProps = {};
 export default memo(TodoList);
 
 const incompleteMapper = (s: State) => ({ todos: incompleteSelector(s) });
+const completeMapper = (s: State) => ({ todos: completeSelector(s) });
 
-const completeMapper = (s: State) => {
-  return { todos: completeSelector(s) };
+const dispatchMapper = {
+  handleStatusChange: statusChangeCreator,
 };
 
-const incompleteHOC = connect(incompleteMapper);
-const completeHOC = connect(completeMapper);
+const incompleteHOC = connect(incompleteMapper, dispatchMapper);
+const completeHOC = connect(completeMapper, dispatchMapper);
 
 export const IncompleteTodoList = incompleteHOC(TodoList);
 export const CompleteTodoList = completeHOC(TodoList);

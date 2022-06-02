@@ -2,7 +2,7 @@ import { ChangeEvent, FC, memo, useState } from "react";
 import { useDispatch } from "react-redux";
 import Button from "./Button";
 import { TodoFormProps } from "../types/types";
-import { TODO_ADD } from "../actions/todo.";
+import { addCreator, TODO_ADD } from "../actions/todo.";
 
 const TodoForm: FC<TodoFormProps> = (props) => {
   const [todo, setTodo] = useState("");
@@ -14,11 +14,12 @@ const TodoForm: FC<TodoFormProps> = (props) => {
   };
 
   const saveTodo = (event: any) => {
+    // doubt
     event.preventDefault();
     if (todo === "") {
       return;
     } else {
-      dispatch({ type: TODO_ADD, payload: todo });
+      dispatch(addCreator(todo));
       setTodo("");
       props.hideForm();
     }
