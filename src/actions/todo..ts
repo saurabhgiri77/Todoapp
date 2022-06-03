@@ -14,3 +14,10 @@ export const statusChangeCreator = (todoId: number, doneChange: boolean) => {
     payload: { id: todoId, done: doneChange },
   };
 };
+
+export const deleteCreator = (todoId: number) => {
+  return {
+    type: TODO_DELETE,
+    payload: { id: todoId },
+  };
+};

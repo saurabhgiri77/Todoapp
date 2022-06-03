@@ -1,8 +1,8 @@
-import { ChangeEvent, FC, memo, useState } from "react";
+import { ChangeEvent, FC, FormEventHandler, memo, useState } from "react";
 import { useDispatch } from "react-redux";
 import Button from "./Button";
 import { TodoFormProps } from "../types/types";
-import { addCreator, TODO_ADD } from "../actions/todo.";
+import { addCreator } from "../actions/todo.";
 
 const TodoForm: FC<TodoFormProps> = (props) => {
   const [todo, setTodo] = useState("");
@@ -13,8 +13,7 @@ const TodoForm: FC<TodoFormProps> = (props) => {
     setTodo(event.target.value);
   };
 
-  const saveTodo = (event: any) => {
-    // doubt
+  const saveTodo = (event: React.FormEvent) => {
     event.preventDefault();
     if (todo === "") {
       return;
