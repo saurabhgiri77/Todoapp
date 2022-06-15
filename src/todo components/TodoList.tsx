@@ -23,7 +23,7 @@ const TodoList: FC<Props> = ({ todos, handleStatusChange, onDelete }) => {
           onDelete={onDelete}
         />
       ))}
-      {!todos.length && <h1 className="text-gray-500">No todo's here</h1>}
+      {!todos.length && <h1 className="text-gray-300">No todo's here</h1>}
     </div>
   );
 };

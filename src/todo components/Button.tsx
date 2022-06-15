@@ -1,5 +1,6 @@
 import { FC, memo } from "react";
 import { buttonProps } from "../types/types";
+import cn from "classnames";
 
 const Button: FC<buttonProps> = (props) => {
   let theme = "bg-yellow-500 rounded-md text-white";
@@ -13,7 +14,10 @@ const Button: FC<buttonProps> = (props) => {
   }
 
   return (
-    <button onClick={props.onClick} className={"px-4 py-2 " + theme}>
+    <button
+      onClick={props.onClick}
+      className={cn("px-4 py-2 " + theme, props.className)}
+    >
       {props.children}
     </button>
   );

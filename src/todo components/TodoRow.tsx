@@ -20,12 +20,12 @@ const TodoRow: FC<Props> = ({ todo, onStatusChange, onDelete }) => {
   }, [id]);
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-2 text-blue-400">
       <input
         checked={done}
         onChange={handleChange}
         type="checkbox"
-        className="w-4 h-4 text-yellow-600 border-gray-300 rounded accent-yellow-700 "
+        className="w-4 h-4 rounded accent-green-700 "
       />
       <span className={cn({ "line-through": done })}>{title}</span>
       <button

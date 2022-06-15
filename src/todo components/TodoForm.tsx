@@ -29,7 +29,7 @@ const TodoForm: FC<TodoFormProps> = (props) => {
       onSubmit={saveTodo}
       className="border p-3 sm:p-3 sm:text-lg rounded-md"
     >
-      <h3 className="sm:py-2 py-2 font-semibold">Create a Todo</h3>
+      <h3 className="sm:py-2 py-2 font-semibold text-white">Create a Todo</h3>
       <input
         value={todo}
         onChange={inputChange}

@@ -4,8 +4,13 @@ export const TODO_ADD = "todo added";
 
 export const TODO_DELETE = "todo deleted";
 
+let nextId = 1;
+
 export const addCreator = (titleText: string) => {
-  return { type: TODO_ADD, payload: titleText };
+  return {
+    type: TODO_ADD,
+    payload: { id: ++nextId, title: titleText, done: false },
+  };
 };
 
 export const statusChangeCreator = (todoId: number, doneChange: boolean) => {

@@ -1,53 +1,26 @@
 import { createStore, Reducer } from "redux";
 import { TODO_ADD, TODO_DELETE, TODO_STATUS_CHANGE } from "./actions/todo.";
+import { initialTodoState, todoReducer, TodoState } from "./state/todo";
+import { initialUserState, userReducer, UserState } from "./state/user";
 import { Todo } from "./types/types";
 
 export type State = {
-  todos: Todo[];
+  todos: TodoState;
+  users: UserState;
 };
-
-let nextNumber = 0;
 
 const savedTodos = localStorage.getItem("todos");
 
 const initialState: State = {
-  todos: savedTodos ? JSON.parse(savedTodos) : [],
+  todos: initialTodoState,
+  users: initialUserState,
 };
 
 const reducer: Reducer<State> = (state = initialState, action) => {
-  console.log("state", state, "action", action); //doubt
-  switch (action.type) {
-    case TODO_ADD: {
-      const titleText = action.payload;
-      const todo: Todo = { id: nextNumber, title: titleText, done: false };
-      nextNumber++;
-
-      return { ...state, todos: [...state.todos, todo] };
-    }
-
-    case TODO_STATUS_CHANGE: {
-      const { id, done } = action.payload;
-
-      const newTodos = state.todos.map((t) => {
-        if (t.id === id) {
-          return { ...t, done };
-        }
-        return t;
-      });
-      return { ...state, todos: newTodos };
-    }
-
-    case TODO_DELETE: {
-      const { id } = action.payload;
-
-      const newTodos = state.todos.filter((t) => t.id !== id);
-      return { ...state, todos: newTodos };
-    }
-
-    default: {
-      return state;
-    }
-  }
+  return {
+    todos: todoReducer(state.todos, action),
+    users: userReducer(state.users, action),
+  };
 };
 
 const store = createStore(
