@@ -1,5 +1,5 @@
 import { Reducer } from "redux";
-import { TODO_ADD, TODO_STATUS_CHANGE } from "../actions/todo.";
+import { TODO_ADD, TODO_DELETE, TODO_STATUS_CHANGE } from "../actions/todo.";
 import { Todo } from "../types/types";
 
 export type TodoState = {
@@ -27,15 +27,17 @@ export const todoReducer: Reducer<TodoState> = (
       };
     }
 
-    // case TODO_DELETE: {
-    //   const { id } = action.payload;
+    case TODO_DELETE: {
+      const { id } = action.payload;
 
-    //   const newTodos = Object.keys(todoState.todos)
-    //     .map((todoId) => todoState.todos[todoId as any])
-    //     .filter((t) => t.id !== id);
-    //   // todoState.todos.filter((t) => t.id !== id);
-    //   return { ...todoState, todos: { ...todoState.todos, newTodos } };
-    // }
+      const keys = Object.keys(todoState);
+      const newTodoKeys = keys.filter((idKey) => idKey !== id);
+      console.log(newTodoKeys);
+      const changedState = newTodoKeys.reduce((obj, key) => {
+        return { ...obj, [key]: todoState[key as any] };
+      }, {});
+      return changedState;
+    }
 
     default: {
       return todoState;

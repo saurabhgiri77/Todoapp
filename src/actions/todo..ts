@@ -23,6 +23,6 @@ export const statusChangeCreator = (todoId: number, doneChange: boolean) => {
 export const deleteCreator = (todoId: number) => {
   return {
     type: TODO_DELETE,
-    payload: { id: todoId },
+    payload: { id: todoId.toString() },
   };
 };
