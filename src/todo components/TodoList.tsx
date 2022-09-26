@@ -1,6 +1,10 @@
 import { FC, memo } from "react";
 import { connect } from "react-redux";
-import { deleteCreator, statusChangeCreator } from "../actions/todo.";
+import {
+  deleteCreator,
+  editCreator,
+  statusChangeCreator,
+} from "../actions/todo.";
 import { completeSelector, incompleteSelector } from "../selectors/todo";
 import { State } from "../store";
 import { Todo } from "../types/types";
@@ -10,17 +14,19 @@ type Props = {
   todos: Todo[];
   handleStatusChange: (id: number, done: boolean) => void;
   onDelete: (id: number) => void;
+  onEdit: (id: number, title: string) => void;
 };
 
-const TodoList: FC<Props> = ({ todos, handleStatusChange, onDelete }) => {
+const TodoList: FC<any> = ({ todos, handleStatusChange, onDelete, onEdit }) => {
   return (
     <div>
-      {todos.map((t) => (
+      {todos.map((t: any) => (
         <TodoRow
           key={t.id}
           todo={t}
           onStatusChange={handleStatusChange}
           onDelete={onDelete}
+          onEdit={onEdit}
         />
       ))}
       {!todos.length && <h1 className="text-gray-300">No todo's here</h1>}
@@ -38,6 +44,7 @@ const completeMapper = (s: State) => ({ todos: completeSelector(s) });
 const dispatchMapper = {
   handleStatusChange: statusChangeCreator,
   onDelete: deleteCreator,
+  onEdit: editCreator,
 };
 
 const incompleteHOC = connect(incompleteMapper, dispatchMapper);

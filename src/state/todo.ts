@@ -1,5 +1,10 @@
 import { Reducer } from "redux";
-import { TODO_ADD, TODO_DELETE, TODO_STATUS_CHANGE } from "../actions/todo.";
+import {
+  TODO_ADD,
+  TODO_DELETE,
+  TODO_EDIT,
+  TODO_STATUS_CHANGE,
+} from "../actions/todo.";
 import { Todo } from "../types/types";
 
 export type TodoState = {
@@ -30,13 +35,18 @@ export const todoReducer: Reducer<TodoState> = (
     case TODO_DELETE: {
       const { id } = action.payload;
 
-      const keys = Object.keys(todoState);
-      const newTodoKeys = keys.filter((idKey) => idKey !== id);
-      console.log(newTodoKeys);
-      const changedState = newTodoKeys.reduce((obj, key) => {
-        return { ...obj, [key]: todoState[key as any] };
-      }, {});
-      return changedState;
+      return Object.keys(todoState)
+        .filter((idKey) => idKey !== id)
+        .reduce((obj, key) => {
+          return { ...obj, [key]: todoState[key as any] };
+        }, {});
+    }
+
+    case TODO_EDIT: {
+      console.log("edit chala");
+      const { id, title } = action.payload;
+
+      return { ...todoState, [id]: { ...todoState[id], title } };
     }
 
     default: {
